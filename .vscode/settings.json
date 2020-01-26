@@ -6,6 +6,7 @@
         "iostream": "cpp",
         "filesystem": "cpp",
         "chrono": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "bitset": "cpp"
     }
 }

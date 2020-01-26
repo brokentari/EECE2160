@@ -1,5 +1,15 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Prerequisites
 *.d
+*.DS_store
 
 # Compiled Object files
 *.slo
