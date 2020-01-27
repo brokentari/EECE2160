@@ -20,5 +20,4 @@ int main()
     person.name = "John";
     person.age = 10;
     PrintPerson(&person);
-    cout << "testing sign commit" << endl;
 }
