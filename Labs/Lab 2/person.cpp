@@ -20,4 +20,5 @@ int main()
     person.name = "John";
     person.age = 10;
     PrintPerson(&person);
+	cout << "person" << endl;
 }
