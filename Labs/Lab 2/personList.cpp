@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
-using namespace std;
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
 
 // Linked List Management Code
 struct Person
@@ -114,14 +118,35 @@ int main() {
 	List list;				// Create the main list
 	ListInitialize(&list);			// Initialize the list
 //*************** PUT THE REST OF YOUR CODE HERE  *****************
-
-
-
-
-
-
-
-
-
-
+int input;
+cin >> input;
+while (true){
+		cout << "Main Menu:" << endl;
+		cout << "1. Add a person" << endl;
+		cout << "2. Find a person" << endl;
+		cout << "3. Remove a person" << endl;
+		cout << "4. Print the list" << endl;
+		cout << "5. Exit" << endl;
+		cout << "Select an Option: _ " << endl;
+		cin >> input;
+		switch (input){
+			case 1:
+				cout << "You selected 'Add a person'" << endl;
+				break;
+			case 2:
+				cout << "You selected 'Find a person'" << endl;
+				break;
+			case 3:
+				cout << "You selected 'Remove a person'" << endl;
+				break;
+			case 4:
+				cout << "You selected 'Print the list'" << endl;
+				break;
+			case 5:
+				return(0);
+				break;
+			default: 
+				cout<<"Error: Invalid number"<<endl;
+		}
+	}
 } //end main
