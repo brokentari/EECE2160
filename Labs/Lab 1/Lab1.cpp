@@ -71,7 +71,7 @@ void InsertElement(){
 	for(int i = count-1; i >= index; i--){
 		array[i + 1] = array[i];	
 	}
-	
+
 	array[index] = new_element;
 	count++;
 }
@@ -96,17 +96,16 @@ void PrintVector(){
 
 int main(){
 	Initialize();
-	int x;
-	int input = x;
+	int input;
 	while (true){
-		cout<<"Main Menu:"<<endl;
-		cout<<"1. List vector's contents"<<endl;
-		cout<<"2. Append element at the end"<<endl;
-		cout<<"3. Remove last element"<<endl;
-		cout<<"4. Insert one element"<<endl;
-		cout<<"5. Exit"<<endl;
-		cout<<"Select an Option: _ "<<endl;
-		cin>>input;
+		cout << "Main Menu:" << endl;
+		cout << "1. List vector's contents" << endl;
+		cout << "2. Append element at the end" << endl;
+		cout << "3. Remove last element" << endl;
+		cout << "4. Insert one element" << endl;
+		cout << "5. Exit" << endl;
+		cout << "Select an Option: _ " << endl;
+		cin >> input;
 		switch (input){
 			case 1:
 				cout<<"List vector's contents"<<endl;
