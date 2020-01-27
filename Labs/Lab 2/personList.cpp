@@ -118,9 +118,8 @@ int main() {
 	List list;				// Create the main list
 	ListInitialize(&list);			// Initialize the list
 //*************** PUT THE REST OF YOUR CODE HERE  *****************
-int input;
-cin >> input;
-while (true){
+	int input;
+	while (true){
 		cout << "Main Menu:" << endl;
 		cout << "1. Add a person" << endl;
 		cout << "2. Find a person" << endl;
