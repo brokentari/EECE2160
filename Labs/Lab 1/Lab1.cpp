@@ -37,6 +37,7 @@ void Grow(){
 	size = new_size;
 }
 
+// add an element to the end of the vector
 void AddElement(){
 	if(size == count){
 		Grow();
@@ -87,6 +88,7 @@ void Shrink(){
 	array = new_array;
 }	
 
+// Print the vector
 void PrintVector(){
 	for(int i = 0; i < size; i++){
 		cout << array[i] << " ";
