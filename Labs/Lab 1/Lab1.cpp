@@ -11,6 +11,8 @@ double *array;
 int count;
 int size;
 
+void Shrink();
+
 void Initialize() {
 	count = 0;
 	size = 2;
@@ -52,6 +54,9 @@ void RemoveElement(){
 	if(count>0){
 		array[count-1] = 0;
 		count--;
+		if (size * 0.3 > count) {
+			Shrink();
+		}
 	}
 	else cout << "The array is already empty" << endl;
 }
@@ -82,7 +87,9 @@ void Shrink(){
 	for(int i=0; i < count; i++){
 		array[i] = new_array[i];
 	}
-
+	cout << "Vector shrinked" << endl;
+	cout << "Previous capacity: " << size << "elements." << endl;
+	cout << "New capacity: " << count << " elements." << endl;
 	size = count;
 	array = new_array;
 }	
