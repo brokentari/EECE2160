@@ -72,8 +72,12 @@ int main() {
     cout << "Enter the second number: " << endl;
     cin >> number2;
     cout << number1 << " ^ " << number2 << " = " << to_power_of(number1, number2) << endl;
-    cout << "Maximum number: " << check_max(number1, number2) << endl;
+    cout << "Maximum number: " << check_max(number1, number2) << endl << endl;
     
+    cout << "First number: " << endl;
     convert(number1);
+    cout << endl;
+    cout << "Second number: " << endl;
+    convert(number2);
 }
 
