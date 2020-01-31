@@ -97,8 +97,14 @@ void save_cars_in_file(Car* c, int length) {
 
     if(file.is_open()) {
         for(int i = 0; i < length; i++) {
-            string line = c[i].make + ", " + c[i].model + ", " + 
+            string line = "";
+            if (i == (length - 1)) {
+                line = c[i].make + ", " + c[i].model + ", " + 
+                to_string(c[i].year) + ", " + c[i].color;
+            }else {
+                line = c[i].make + ", " + c[i].model + ", " + 
                 to_string(c[i].year) + ", " + c[i].color + "\n";
+            }
             file << line;
         }
     }
