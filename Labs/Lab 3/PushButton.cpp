@@ -5,6 +5,7 @@
 #include <sys/mman.h>
 #include <bitset>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -140,14 +141,47 @@ void WriteAllLeds(char *pBase, int value)
 
 int ReadAllSwitch(char *pBase)
 {
-	bitset<8> bits;
+	bitset<8> switches;
 	for (int i = 0; i < 8; i++)
 	{
-		bits.set(i, Read1Switch(pBase, i));
+		switches.set(i, Read1Switch(pBase, i));
 	}
 
-	int switch_list = (int)(bits.to_ulong());
+	int switch_list = (int)(switches.to_ulong());
 	return switch_list;
+}
+
+int ReadButton(char *pBase, int value)
+{
+	bitset<8> buttons(value);
+	cout << "Previous value: " << value << endl;
+	if (RegisterRead(pBase, 0x16C) == 1)
+	{
+		sleep(1);
+		buttons <<= 1;
+	}
+	else if (RegisterRead(pBase, 0x170) == 1)
+	{
+		sleep(1);
+		buttons >>= 1;
+	}
+	else if (RegisterRead(pBase, 0x174) == 1)
+	{
+		sleep(1);
+		return value + 1;
+	}
+	else if (RegisterRead(pBase, 0x178) == 1)
+	{
+		sleep(1);
+		return value - 1;
+	}
+	else if (RegisterRead(pBase, 0x17C) == 1)
+	{
+		sleep(1);
+		buttons = ReadAllSwitch(pBase);
+	}
+	int button_list = (int)(buttons.to_ulong());
+	return button_list;
 }
 
 int main()
@@ -164,9 +198,18 @@ int main()
 	}
 
 	// ************** Put your code here **********************
-	cout << ReadAllSwitch(pBase) << endl;
-
-	// Done
+	int value = 0;
+	while (true)
+	{
+		if (value == ReadButton(pBase, value))
+		{
+			value = value;
+		}
+		else
+		{
+			value = ReadButton(pBase, value);
+		}
+	}
 	Finalize(pBase, fd);
 	return 0;
 }
