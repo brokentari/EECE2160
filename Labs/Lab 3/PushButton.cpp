@@ -43,20 +43,13 @@ const int gpio_pbtnc_offset = 0x17C; // Offset for center push button
  * Write a 4-byte value at the specified general-purpose I/O location.
  *
  * @param pBase		Base address returned by 'mmap'.
- * @parem offset	Offset where device is mapped.
-* @ return Switch value read
-
-* @param value		Value to be written.
-*
-* @param switchNum Switch number (0 to 7)
+ * @param offset	Offset where device is mapped.
+ * @param value		Value to be written.
 */
 void RegisterWrite(char *pBase, int offset, int value)
 {
 	*(int *)(pBase + offset) = value;
-} /** Reads the value of a switch
-* - Users base address of I/O
-* @param pBase base address of I/O
-
+} 
 
 /**
  * Read a 4-byte value from the specified general-purpose I/O location.
@@ -118,7 +111,7 @@ void Write1Led(char *pBase, int ledNum, int state)
 * - Users base address of I/O
 * @param pBase base address of I/O
 * @param switchNum Switch number (0 to 7)
-* @ return Switch value read
+* @return Switch value read
 */
 int Read1Switch(char *pBase, int switchNum)
 {
