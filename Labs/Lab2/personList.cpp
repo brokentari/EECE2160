@@ -6,10 +6,12 @@ using std::cin;
 using std::endl;
 using std::string;
 
+int counter=1;
+
 // Linked List Management Code
 struct Person
 {
-	// Unique identifier for the person
+	//s Unique identifier for the person
 	int id;
 	// Information about person
 	string name;
@@ -109,9 +111,65 @@ void PrintPerson(Person *person)
 {
 	cout << "Person with ID: " << person->id << endl;
 	cout << "\tName: " << person->name << endl;
-	cout << "\tAge: " << person->age << endl << endl;;
+	cout << "\tAge: " << person->age << endl << endl;
 }
-
+void AddPerson(List *pist)
+{
+	int age;
+	string name;
+	cout<<"Enter person's name"<<endl;
+	cin>>name;
+	cout<<"Enter person's age"<<endl;
+	cin>>age;
+	pist->count+=1;
+	Person *person = new Person;
+	person->name=name;
+	person->age=age;
+	person->id=counter;
+	counter++;
+	ListInsert(pist, person);
+}
+void FindPerson(List *pist)
+{
+	int id;
+	cout<<"Enter ID"<<endl;
+	cin>>id;
+	ListFind(pist, id);
+	if(id>pist->count)
+	{
+		cout<<"There is no person with that id"<<endl;
+	}
+	else
+	{
+		 PrintPerson(ListGet(pist));
+	}
+}
+void RemovePerson(List *pist)
+{
+	int id;
+	cout<<"Enter ID"<<endl;
+	cin>>id;
+	ListFind(pist, id);
+	if(id>pist->count)
+	{
+		cout<<"There is no person with that id"<<endl;
+	}
+	else
+	{
+		ListRemove(pist);
+		pist->count--;
+	}
+}
+void PrintPist(List *pist)
+{
+	ListHead(pist);
+	for(int i = 0;i<pist->count;i++)
+	{
+		PrintPerson(NULL);
+		ListNext(pist);
+	}
+	
+}	
 /** main function: Will create and process a linked list
  */
 int main() {
@@ -131,21 +189,27 @@ int main() {
 		switch (input){
 			case 1:
 				cout << "You selected 'Add a person'" << endl;
+				AddPerson(&list);
 				break;
 			case 2:
 				cout << "You selected 'Find a person'" << endl;
+				FindPerson(&list);
 				break;
 			case 3:
 				cout << "You selected 'Remove a person'" << endl;
+				RemovePerson(&list);
 				break;
 			case 4:
 				cout << "You selected 'Print the list'" << endl;
+				PrintPist(&list);
 				break;
 			case 5:
 				return(0);
 				break;
 			default: 
 				cout<<"Error: Invalid number"<<endl;
+				return(0);
+				break;
 		}
 	}
-} //end main
+}
