@@ -5,6 +5,7 @@
 #include <sys/mman.h>
 #include <bitset>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -38,65 +39,31 @@ const int gpio_pbtnu_offset = 0x174;  // Offset for up push button
 const int gpio_pbtnd_offset = 0x178;  // Offset for down push button
 const int gpio_pbtnc_offset = 0x17C;  // Offset for center push button
 
-/**
- * Write a 4-byte value at the specified general-purpose I/O location.
- *
- * @param pBase		Base address returned by 'mmap'.
- * @parem offset	Offset where device is mapped.
-* @ return Switch value read
-
-* @param value		Value to be written.
-*
-* @param switchNum Switch number (0 to 7)
-*/
-void RegisterWrite(char *pBase, int offset, int value)
+class ZedBoard
 {
-	* (int *) (pBase + offset) = value;
-}/** Reads the value of a switch
-* - Users base address of I/O
-* @param pBase base address of I/O
+	char *pBase;
+	int fd;
+public:
+	ZedBoard()
+	{
+		*fd = open( "/dev/mem", O_RDWR);
+        	return (char *) mmap(NULL, gpio_size, PROT_READ | PROT_WRITE, MAP_SHARED,
+                *fd, gpio_address);
 
+	}
+	~ZedBoard()
+	{
+	       munmap(pBase, gpio_size);
+	        close(fd);
+	}		
+	void RegisterWrite(int offset, int value) {
+		 * (int *) (pBase + offset) = value;
+	}
+	int RegisterRead(int offset)
+	{
+		 return * (int *) (pBase + offset);
+	}
 
-/**
- * Read a 4-byte value from the specified general-purpose I/O location.
- *
- * @param pBase		Base address returned by 'mmap'.
- * @param offset	Offset where device is mapped.
- * @return		Value read.
- */
-int RegisterRead(char *pBase, int offset)
-{
-	return * (int *) (pBase + offset);
-}
-
-/**
- * Initialize general-purpose I/O
- *  - Opens access to physical memory /dev/mem
- *  - Maps memory at offset 'gpio_address' into virtual address space
- *
- * @param  fd	File descriptor passed by reference, where the result
- *		of function 'open' will be stored.
- * @return	Address to virtual memory which is mapped to physical,
- *          	or MAP_FAILED on error.
- */
-char *Initialize(int *fd)
-{
-	*fd = open( "/dev/mem", O_RDWR);
-	return (char *) mmap(NULL, gpio_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-		*fd, gpio_address);
-}
-
-/**
- * Close general-purpose I/O.
- *
- * @param pBase	Virtual address where I/O was mapped.
- * @param fd	File descriptor previously returned by 'open'.
- */
-void Finalize(char *pBase, int fd)
-{
-	munmap(pBase, gpio_size);
-	close(fd);
-}
 
 /** Changes the state of an LED (ON or OFF)
 * @param pBase base address of I/O
@@ -148,12 +115,44 @@ int ReadAllSwitch(char *pBase) {
 	return switch_list;
 }
 
-int main()
-{
-	// Initialize
-	int fd;
-	char *pBase = Initialize(&fd);
+int ReadButton(char *pBase, int value) {
+	bitset<8> buttons(value);	
+		cout << "Previous value: " << value << endl;
+		if(RegisterRead(pBase, 0x16C) == 1) {
+			sleep(1); 
+			buttons <<= 1;
+       			 cout << "New bitset: " << buttons << endl;
+		} 
+		else if(RegisterRead(pBase, 0x170) == 1) {	
+			sleep(1);
+			buttons >>= 1;	
+	        	cout << "New bitset: " << buttons << endl;
+		}
+		else if(RegisterRead(pBase, 0x174) == 1) {
+			sleep(1);
+			cout << "New value: " << value + 1 << endl;
+			return value + 1;
+		}
+		else if(RegisterRead(pBase, 0x178) == 1) {
+			sleep(1);
+			cout << "New value: " << value - 1 << endl;
+			return value - 1;
 
+		}		
+		else if(RegisterRead(pBase, 0x17C) == 1) {
+			sleep(1);
+			buttons = ReadAllSwitch(pBase);
+	        	cout << "New bitset: " << buttons << endl;
+
+		}
+		int button_list = (int)(buttons.to_ulong());
+		return button_list;
+	}
+};
+
+int main()
+{	
+	ZedBoard zed;
 	// Check error
 	if (pBase == MAP_FAILED)
 	{
@@ -162,10 +161,16 @@ int main()
 	}	
 	
 // ************** Put your code here **********************
-	cout << ReadAllSwitch(pBase) << endl;
-
-	// Done
+	int value = 0;
+	while (true) {
+		if (value == ReadButton(pBase, value)) {
+			value = value;
+		}
+		else {
+			value = ReadButton(pBase, value);
+		}
+		WriteAllLeds(pBase, value);
+	}
 	Finalize(pBase, fd);
 	return 0;
 }
-
