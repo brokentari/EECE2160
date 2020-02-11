@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <sstream>
 
 using namespace std;
 
@@ -25,7 +26,8 @@ Car * insert_array(Car *c, string file_path) {
         string rest = line.substr(line.find(",") + 2);
         string model = rest.substr(0, rest.find(","));
         rest = rest.substr(rest.find(",") + 2);
-        int year = stoi(rest.substr(0, rest.find(",")));
+        int year;
+        istringstream(rest.substr(0, rest.find(","))) >> year;
         rest = rest.substr(rest.find(",")+2);
         string color = rest;
         Car curr_car = {make, model, year, color};
@@ -73,17 +75,13 @@ Car * sort_cars_by_make(Car* c, int length) {
     return c;
 }
 
-bool operator ==(Car car1, Car car2) {
-    return (car1.make == car2.make) && (car1.model == car2.model) 
-        && (car1.year == car2.year) && (car1.color == car2.color);  
-}
 
 void print_duplicates(Car* c, int length) {
-    cout << "Duplicate Cars: " << endl;
     for (int i = 0; i < length; i++) {
         for (int j = 0; j < length; j++) {
             if (j != i) {
-                if(c[i] == c[j]) {
+                if((c[i].make == c[j].make) && (c[i].model == c[j].model) 
+        && (c[i].year == c[j].year) && (c[i].color == c[j].color)) {
                     print_car(c[i]);
                     cout << endl;
                 }
@@ -110,7 +108,6 @@ void save_cars_in_file(Car* c, int length) {
     }
 
     file.close();
-    cout << "Done writing to file" << endl;
 }
 
 int main() {
@@ -139,15 +136,12 @@ int main() {
         switch(input) {
             case 1:
                 cars = insert_array(cars, "CarRecords.txt");
-                cout << "Car Records loaded from CarRecords.txt" << endl;
-                cout << "Total lines: " << total_lines << endl;
                 break;
             case 2:
                 print_cars_array(cars, total_lines);
                 break;
             case 3:
                 sort_cars_by_make(cars, total_lines);
-                cout << "Cars sorted by make" << endl;
                 break;
             case 4:
                 print_duplicates(cars, total_lines);
@@ -157,7 +151,6 @@ int main() {
                 break;
             case 6:
                 return 0;
-                break;
             default:
                 cout << "Not an available option" << endl;
         }
