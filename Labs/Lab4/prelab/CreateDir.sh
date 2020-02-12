@@ -1,3 +1,4 @@
+#!/bin/bash
 # CreateDir.sh
 
 echo "Enter the name of the new directory";

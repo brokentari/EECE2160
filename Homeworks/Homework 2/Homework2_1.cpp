@@ -11,22 +11,30 @@ class Car {
         int year;
         string color;
     public:
+        // default constructor for car
         Car() {}
+
+        // set the fields for the car
         void setFields(string mk, string md, int yr, string cl) {
             make = mk;
             model = md;
             year = yr;
             color = cl;
         }
+
         string getMake() { return make; }
+
         string getModel() { return model; }
+
         int getYear() { return year; }
+
         string getColor() { return color; }
+
         void printCar() {
-            cout << "\tMake: " << make << endl;
-            cout << "\tModel: " << model << endl;
-            cout << "\tYear: " <<  year << endl;
-            cout << "\tColor: " << color << endl << endl;
+            cout << make << ", ";
+            cout << model << ", ";
+            cout << year << ", ";
+            cout << color << ", " << endl;
         }
 };
 
@@ -47,6 +55,7 @@ class CarRecords {
             Car c;
             string line;
 
+            // seperates string to get car's members
             for (int i = 0; i < arraySize; i++) {
                 getline(infile, line);
                 string make = line.substr(0, line.find(",", 0));
@@ -60,15 +69,19 @@ class CarRecords {
                 cars[i] = c;
             }
         }
+
+        // default destructor
         ~CarRecords() {
             infile.close();
             delete this;
         } 
+
         void printCarRecords() {
             for (int i = 0; i < arraySize; i++) {
                 cars[i].printCar();
             }
         }
+
         void sort_cars_by_make() {
             int i, j;
             Car min;
@@ -83,6 +96,7 @@ class CarRecords {
                 }
             }
         }
+
         void sort_cars_by_year() {
             int i, j;
             Car min;
@@ -96,6 +110,7 @@ class CarRecords {
                 }
             }
         }
+        
         void print_duplicates() {
             for (int i = 0; i < arraySize; i++ ) {
                 for (int j = 0; j < arraySize; j++) {
@@ -118,15 +133,22 @@ int main() {
     cin >> numRecs;
     CarRecords *cr = new CarRecords(numRecs);
 
-    //Print car records
+    // print original car records
     cr->printCarRecords();
-    //Sort by year
+
+    // sort by year
+     cout << endl << "SORTING RECORDS BY YEAR..........." << endl << endl;
     cout << "--------------------Sorted by year---------------------" << endl << endl;
     cr->sort_cars_by_year();
     cr->printCarRecords();
+
+    // sorting my make 
+    cout << endl << "SORTING RECORDS BY MAKE............" << endl << endl;
     cout << "--------------------Sorted by make---------------------" << endl << endl;
     cr->sort_cars_by_make();
     cr->printCarRecords();
+
+    // duplicates
     cout << "--------------------Duplicates--------------------" << endl << endl;
     cr->print_duplicates();
     delete cr;
