@@ -10,36 +10,39 @@
 using namespace std;
 
 
-class Wiimote {
+class WiimoteButns {
     private:
         int fd;
-
+    
     public:
-        Wiimote() {
-            fd = open("/dev/input/event0", O_RDONLY); 
-            if (fd == -1) {
-                cerr << "Error: Could not open event file -forgot sudo?\n";
-                exit(1);
-            }
+        WiimoteButns() {
+            fd = open("/dev/input/event2", O_RDONLY);
+            
+        }
+
+        ~WiimoteButns() {
+            close(fd);
+        }
+
+        void ButtonEvent(int code, int value) {
+                cout << "Code: " << code << ", value, " << value << endl;
+        }
+
+        void Listen() {
             while (true) {
                 // Read a packet of 16 bytes from Wiimote
-                char buffer[16];
-                read(fd, buffer, 16);
+                char buffer[32];
+                read(fd, buffer, 32);
 
                 // Extract code (byte 10) and value (byte 12) from packet
                 int code = buffer[10];
-                short acceleration = * (short *) (buffer + 12);
-
-                // Print item
-                cout << "Code: " << code << ", acceleration, " << acceleration << endl;
+                int value = buffer[12];
+                AccelerationEvent(code, value);
             }
         }
-
-       ~Wiimote() {
-           close(fd);
-       } 
 };
 
 int main() {
-    Wiimote wiimote;
+    WiimoteButns wiimote;
+    WiimoteButns.Listen();
 }
